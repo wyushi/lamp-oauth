@@ -1,0 +1,6 @@
+public_html/vendor
+composer.lock
+log/*
+backup/*
+
+.DS_Store
