@@ -1,1 +1,1 @@
-docker run --name lamp-oauth -p 3000:80 -p 4000:8080 -v $(pwd):/var/www/example.com -it linode/lamp /bin/bash
+docker run --name lamp-oauth -p 3000:80 -p 4000:8080 -v $(pwd):/var/www/example.com -it yushi/lamp /bin/bash
