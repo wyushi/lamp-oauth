@@ -6,7 +6,7 @@ function connect() {
         $dbuser="example_user";
         $dbpass="Admin2015";
         $dbname="exampleDB";
-        $dbh = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);  
+        $dbh = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         echo "Connected successfully\n";
         return $dbh;
@@ -16,17 +16,17 @@ function connect() {
 }
 
 function db_exec($dbh, $sql) {
-	try {
-		$dbh->exec($sql);
-	} catch(PDOException $e) {
+    try {
+        $dbh->exec($sql);
+    } catch(PDOException $e) {
         echo "Create Table failed: " . $e->getMessage() . "\n";
     }
 }
 
 function create_account($dbh, $username, $email) {
-	$sql = "INSERT INTO account (username, email)
-	VALUES ('$username', '$email')";
-	db_exec($dbh, $sql);
+    $sql = "INSERT INTO account (username, email)
+    VALUES ('$username', '$email')";
+    db_exec($dbh, $sql);
 }
 
 $dbh = connect();
