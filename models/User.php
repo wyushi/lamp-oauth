@@ -53,10 +53,11 @@ class User {
 
     public function insertUser($data) {
         try {
-            $sql = "INSERT INTO account (username, email) VALUES (:username, :email)";
+            $sql = "INSERT INTO account (username, password) VALUES (:username, :password)";
             $stmt = $this->core->dbh->prepare($sql);
             if ($stmt->execute($data)) {
                 $data['id'] = $this->core->dbh->lastInsertId();
+                unset($data['password']);
                 return $data;
             } else {
                 return '0';

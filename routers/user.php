@@ -11,6 +11,7 @@ $app->get('/users', function ($request, $response, $args) {
 $app->post('/users', function ($request, $response, $args) {
     $parsed = $request->getParsedBody();
     $model = new User();
+    $parsed['password'] = hash("sha1", $parsed['password']);
     $user = $model->insertUser($parsed);
     $response = $response->withHeader('Content-type', 'application/json');
     $response->getBody()->write(json_encode($user));
