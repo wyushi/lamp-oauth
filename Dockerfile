@@ -2,7 +2,7 @@ FROM linode/lamp
 
 RUN echo "install vim"
 
-RUN apt-get update && apt-get install -y vim php5-mysqlnd
+RUN apt-get update && apt-get install -y vim php5-mysql
 
 RUN a2enmod rewrite
 
