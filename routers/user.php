@@ -4,6 +4,7 @@ use models\User;
 $app->get('/users', function ($request, $response, $args) {
     $model = new User();
     $users = $model->getUsers();
+    $response = $response->withHeader('Content-type', 'application/json');
     $response->getBody()->write(json_encode($users));
     return $response;
 });

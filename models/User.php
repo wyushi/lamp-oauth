@@ -36,13 +36,13 @@ class User {
         return $r;
     }
 
-    public function getUserByLogin($email, $pass) {
+    public function getUserByLogin($username, $password) {
         $r = array();
 
-        $sql = "SELECT * FROM user WHERE email=:email AND password=:pass";
+        $sql = "SELECT * FROM account WHERE username=:username AND password=:password";
         $stmt = $this->core->dbh->prepare($sql);
-        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-        $stmt->bindParam(':pass', $pass, PDO::PARAM_STR);
+        $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+        $stmt->bindParam(':password', $password, PDO::PARAM_STR);
         if ($stmt->execute()) {
             $r = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } else {
