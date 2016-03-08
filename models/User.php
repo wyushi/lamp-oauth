@@ -12,7 +12,7 @@ class User {
 
     public function getUsers() {
         $r = array();
-        $sql = "SELECT * FROM account";
+        $sql = "SELECT * FROM oauth_users";
         $stmt = $this->core->dbh->prepare($sql);
         if ($stmt->execute()) {
             $r = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -39,7 +39,7 @@ class User {
     public function getUserByLogin($username, $password) {
         $r = array();
 
-        $sql = "SELECT * FROM account WHERE username=:username AND password=:password";
+        $sql = "SELECT * FROM oauth_users WHERE username=:username AND password=:password";
         $stmt = $this->core->dbh->prepare($sql);
         $stmt->bindParam(':username', $username, PDO::PARAM_STR);
         $stmt->bindParam(':password', $password, PDO::PARAM_STR);
@@ -53,7 +53,7 @@ class User {
 
     public function insertUser($data) {
         try {
-            $sql = "INSERT INTO account (username, password) VALUES (:username, :password)";
+            $sql = "INSERT INTO oauth_users (username, password) VALUES (:username, :password)";
             $stmt = $this->core->dbh->prepare($sql);
             if ($stmt->execute($data)) {
                 $data['id'] = $this->core->dbh->lastInsertId();
