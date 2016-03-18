@@ -1,9 +1,9 @@
 {
     "require": {
         "slim/slim": "^3.0",
-        "tuupola/slim-jwt-auth": "^2.0",
         "tuupola/slim-basic-auth": "^2.0",
-        "bshaffer/oauth2-server-php": "^1.8"
+        "bshaffer/oauth2-server-php": "^1.8",
+        "monolog/monolog": "^1.13"
     },
     "autoload":{
         "psr-4":{
