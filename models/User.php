@@ -22,12 +22,12 @@ class User {
         return $r;
     }
 
-    public function getUserById($id) {
+    public function getUserByName($username) {
         $r = array();
 
-        $sql = "SELECT nombre * evnt_usuario WHERE id=$id";
+        $sql = "SELECT * FROM oauth_users WHERE username=:username";
         $stmt = $this->core->dbh->prepare($sql);
-        //$stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
+        $stmt->bindParam(':username', $username, PDO::PARAM_STR);
         if ($stmt->execute()) {
             $r = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } else {
@@ -53,7 +53,7 @@ class User {
 
     public function insertUser($data) {
         try {
-            $sql = "INSERT INTO oauth_users (username, password) VALUES (:username, :password)";
+            $sql = "INSERT INTO oauth_users (username, password, first_name, last_name) VALUES (:username, :password, :first_name, :last_name)";
             $stmt = $this->core->dbh->prepare($sql);
             if ($stmt->execute($data)) {
                 $data['id'] = $this->core->dbh->lastInsertId();

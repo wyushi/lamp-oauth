@@ -35,7 +35,7 @@ $app->oauthServer = $server;
 $core = Core::getInstance();
 
 $app->add(new \Slim\Middleware\HttpBasicAuthentication([
-    "path" => "/users",
+    "path" => "/authorize",
     "secure" => false,
     "authenticator" => new UserAuthenticator(),
     "error" => function ($request, $response, $arguments) {
