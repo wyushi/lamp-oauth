@@ -21,12 +21,6 @@ $app->post('/users', function ($request, $response, $args) {
 
 $mw = function ($request, $response, $next) use ($app) {
 
-    echo "<pre>";
-    print_r($request->getAttribute('name'));
-    echo "</pre>";
-
-
-    echo "---token---<br/>";
     $oauthReq = OAuth2\Request::createFromGlobals();
     $server = $app->oauthServer;
 
@@ -46,13 +40,8 @@ $mw = function ($request, $response, $next) use ($app) {
 
 $app->get('/users/{name}', function ($request, $response, $args) {
     $authUser = $_SERVER['PHP_AUTH_USER'];
-    echo "<pre>";
-    print_r($_SERVER['PHP_AUTH_USER']);
-    echo "</pre>";
-
     $model = new User();
     $username = $request->getAttribute('name');
-    print_r($username);
     $user = $model->getUserByName($username);
     $response->getBody()->write(json_encode($user));
     return $response;

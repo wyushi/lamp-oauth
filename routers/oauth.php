@@ -30,10 +30,6 @@ $app->get('/authorize', function ($request, $response, $args) use ($app){
     $oauthReq = OAuth2\Request::createFromGlobals();
     $oauthRes = new OAuth2\Response();
 
-    echo "<pre>";
-    print_r($oauthReq);
-    echo "</pre>";
-
     if (!$server->validateAuthorizeRequest($oauthReq, $oauthRes)) {
         $oauthRes->send();
         die;
@@ -60,15 +56,14 @@ $app->post('/authorize', function ($request, $response, $args) use ($app){
     }
 
     $username = $_SERVER['PHP_AUTH_USER'];
-    echo $username;
-
     $is_authorized = ($_POST['authorized'] === 'yes');
     $server->handleAuthorizeRequest($oauthReq, $oauthRes, $is_authorized, $username);
-    if ($is_authorized) {
-      // this is only here so that you get to see your code in the cURL request. Otherwise, we'd redirect back to the client
-      $code = substr($oauthRes->getHttpHeader('Location'), strpos($oauthRes->getHttpHeader('Location'), 'code=')+5, 40);
-      exit("SUCCESS! Authorization Code: $code");
-    }
+    // if ($is_authorized) {
+    //   // this is only here so that you get to see your code in the cURL request. Otherwise, we'd redirect back to the client
+    //   $code = substr($oauthRes->getHttpHeader('Location'), strpos($oauthRes->getHttpHeader('Location'), 'code=')+5, 40);
+
+    // }
     $oauthRes->send();
+    die;
 });
 
