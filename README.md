@@ -4,7 +4,7 @@ This project is the LAMP version of project [OAuth 2.0 Servers](https://github.c
 
 It is used [Slim 3](http://www.slimframework.com/) micro framework to build the PHP project structure.
 
-And It is use [OAuth 2.0 Server PHP](http://bshaffer.github.io/oauth2-server-php-docs/) to handle OAuth 2.0 features. 
+And It is use [OAuth 2.0 Server PHP](http://bshaffer.github.io/oauth2-server-php-docs/) to handle OAuth 2.0 features.
 
 ## Setup
 
@@ -24,10 +24,30 @@ Base Image: [linode/lamp](https://hub.docker.com/r/linode/lamp/)
 
 For More LAMP settings, check [docker](https://hub.docker.com/r/linode/lamp/)
 
-### MySQL
+#### Apache 2
+
+In /etc/apache2/apache2.conf (If you are using docker, this would be automatically done)
+```
+<Directory /var/www/>
+	Options Indexes FollowSymLinks
+	AllowOverride All
+	Require all granted
+</Directory>
+```
+
+#### MySQL
 * Example database: **exampleDB**
 * Example user: **example_user**
 * Example user password: **Admin2015**
+
+Build Table Schema:
+```
+php -f setup_db.php
+```
+or
+```
+mysql -p < db_tables
+```
 
 ### Composer & Dependencies
 
