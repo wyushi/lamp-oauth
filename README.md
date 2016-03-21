@@ -1,5 +1,11 @@
 # LAMP-Oauth
 
+This project is the LAMP version of project [OAuth 2.0 Servers](https://github.com/wyushi/oauth2-servers).
+
+It is used [Slim 3](http://www.slimframework.com/) micro framework to build the PHP project structure.
+
+And It is use [OAuth 2.0 Server PHP](http://bshaffer.github.io/oauth2-server-php-docs/) to handle OAuth 2.0 features. 
+
 ## Setup
 
 ### LAMP
