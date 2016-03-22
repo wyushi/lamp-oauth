@@ -1,23 +1,25 @@
-# LAMP-Oauth
+# OAuth 2.0 Server on LAMP stack
 
-This project is the LAMP version of project [OAuth 2.0 Servers](https://github.com/wyushi/oauth2-servers).
+This project is the LAMP stack version of project [OAuth 2.0 Servers](https://github.com/wyushi/oauth2-servers).
 
 It is used [Slim 3](http://www.slimframework.com/) micro framework to build the PHP project structure.
 
 And It is use [OAuth 2.0 Server PHP](http://bshaffer.github.io/oauth2-server-php-docs/) to handle OAuth 2.0 features.
 
+[Docker](https://www.docker.com/) is used to make development environment setup easier.
+4
 ## Setup
 
 ### LAMP
 
-Build Image
+Build an image
 ```
-docker build -t your_lamp_image .
+$ docker build -t your_lamp_image .
 ```
 
-Run container
+Run a container
 ```
-docker run -p 3000:80 -p 4000:8080 -v $(pwd):/var/www/example.com -it your_lamp_image /bin/bash
+$ docker run -p 3000:80 -p 4000:8080 -v $(pwd):/var/www/example.com -it your_lamp_image /bin/bash
 ```
 
 Base Image: [linode/lamp](https://hub.docker.com/r/linode/lamp/)
@@ -40,13 +42,13 @@ In /etc/apache2/apache2.conf (If you are using docker, this would be automatical
 * Example user: **example_user**
 * Example user password: **Admin2015**
 
-Build Table Schema:
+Build the table schemas:
 ```
-php -f setup_db.php
+$ php -f setup_db.php
 ```
 or
 ```
-mysql -p < db_tables
+$ mysql -p < db_tables
 ```
 
 ### Composer & Dependencies
@@ -56,16 +58,17 @@ Download [Composer docker image](https://hub.docker.com/r/composer/composer/)
 docker pull composer/composer
 ```
 
-Install Dependencies (vendor)
+Install dependencies (vendor)
 ```
-docker run --rm -v $(pwd):/app composer/composer install
+$ docker run --rm -v $(pwd):/app composer/composer install
 ```
 
-\*Update Dependencies
+\*Update dependencies
 
 ```
-docker run --rm -v $(pwd):/app composer/composer update
+$ docker run --rm -v $(pwd):/app composer/composer update
 ```
+
 ## License
 (The MIT License)
 
