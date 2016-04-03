@@ -53,9 +53,14 @@ class User {
 
     public function insertUser($data) {
         try {
-            $sql = "INSERT INTO oauth_users (username, password, first_name, last_name) VALUES (:username, :password, :first_name, :last_name)";
+            $sql = "INSERT INTO oauth_users (username, password, first_name, last_name, my_words) VALUES (:username, :password, :first_name, :last_name, :my_words)";
             $stmt = $this->core->dbh->prepare($sql);
-            if ($stmt->execute($data)) {
+            $stmt->bindParam(':username', $data['username'], PDO::PARAM_STR);
+            $stmt->bindParam(':password', $data['password'], PDO::PARAM_STR);
+            $stmt->bindParam(':first_name', $data['first_name'], PDO::PARAM_STR);
+            $stmt->bindParam(':last_name', $data['last_name'], PDO::PARAM_STR);
+            $stmt->bindParam(':my_words', $data['my_words'], PDO::PARAM_STR);
+            if ($stmt->execute()) {
                 $data['id'] = $this->core->dbh->lastInsertId();
                 unset($data['password']);
                 return $data;

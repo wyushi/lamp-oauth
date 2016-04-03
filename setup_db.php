@@ -15,6 +15,8 @@ function connect() {
     }
 }
 
+$dbh = connect();
+
 function db_exec($dbh, $sql) {
     try {
         $dbh->exec($sql);
@@ -28,8 +30,6 @@ function create_account($dbh, $username, $email) {
     VALUES ('$username', '$email')";
     db_exec($dbh, $sql);
 }
-
-$dbh = connect();
 
 // http://bshaffer.github.io/oauth2-server-php-docs/cookbook/
 
@@ -101,6 +101,5 @@ db_exec($dbh, $sql_jwt);
 db_exec($dbh, $sql_refresh_token);
 
 // create_account($dbh, "yushi", "yushi@fm.com");
-
 
 $dbh =  null;

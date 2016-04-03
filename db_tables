@@ -33,6 +33,7 @@ username VARCHAR(255) NOT NULL,
 password VARCHAR(2000),
 first_name VARCHAR(255),
 last_name VARCHAR(255),
+my_words VARCHAR(1024),
 CONSTRAINT username_pk PRIMARY KEY (username)
 );
 

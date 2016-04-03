@@ -3,19 +3,11 @@
 $app->get('/oauth', function ($request, $response, $args) use ($app) {
     $server = $app->oauthServer;
     $oauthReq = OAuth2\Request::createFromGlobals();
-
     var_dump($oauthReq);
     return $response;
 });
 
-$app->post('/token', function ($request, $response, $args) use ($app) {
-    $server = $app->oauthServer;
-    $oauthReq = OAuth2\Request::createFromGlobals();
-    $server->handleTokenRequest($oauthReq)->send();
-});
-
 $app->get('/resource', function ($request, $response, $args) use ($app){
-
     $oauthReq = OAuth2\Request::createFromGlobals();
     $server = $app->oauthServer;
     if (!$server->verifyResourceRequest($oauthReq)) {
@@ -25,27 +17,14 @@ $app->get('/resource', function ($request, $response, $args) use ($app){
     return $response->write('success');
 });
 
-$app->get('/authorize', function ($request, $response, $args) use ($app){
+
+$app->post('/oauth2/token', function ($request, $response, $args) use ($app) {
     $server = $app->oauthServer;
     $oauthReq = OAuth2\Request::createFromGlobals();
-    $oauthRes = new OAuth2\Response();
-
-    if (!$server->validateAuthorizeRequest($oauthReq, $oauthRes)) {
-        $oauthRes->send();
-        die;
-    }
-
-    if (empty($_POST)) {
-      exit('
-    <form method="post">
-      <label>Do You Authorize TestClient?</label><br />
-      <input type="submit" name="authorized" value="yes">
-      <input type="submit" name="authorized" value="no">
-    </form>');
-    }
+    $server->handleTokenRequest($oauthReq)->send();
 });
 
-$app->post('/authorize', function ($request, $response, $args) use ($app){
+$app->get('/oauth2/authorize', function ($request, $response, $args) use ($app) {
     $server = $app->oauthServer;
     $oauthReq = OAuth2\Request::createFromGlobals();
     $oauthRes = new OAuth2\Response();
@@ -56,14 +35,28 @@ $app->post('/authorize', function ($request, $response, $args) use ($app){
     }
 
     $username = $_SERVER['PHP_AUTH_USER'];
+    $clientName = $request->getQueryParams()['client_id'];
+    return $this->view->render($response, 'dialog.html', [
+      'username' => $username,
+      'client_name' => $clientName
+    ]);
+});
+
+$app->post('/oauth2/authorize', function ($request, $response, $args) use ($app){
+    $server = $app->oauthServer;
+    $oauthReq = OAuth2\Request::createFromGlobals();
+    $oauthRes = new OAuth2\Response();
+
+    if (!$server->validateAuthorizeRequest($oauthReq, $oauthRes)) {
+        $oauthRes->send(json_encode([
+            "error" => "invalid authorize request"
+        ]));
+        die;
+    }
+
+    $username = $_SERVER['PHP_AUTH_USER'];
     $is_authorized = ($_POST['authorized'] === 'yes');
     $server->handleAuthorizeRequest($oauthReq, $oauthRes, $is_authorized, $username);
-    // if ($is_authorized) {
-    //   // this is only here so that you get to see your code in the cURL request. Otherwise, we'd redirect back to the client
-    //   $code = substr($oauthRes->getHttpHeader('Location'), strpos($oauthRes->getHttpHeader('Location'), 'code=')+5, 40);
-
-    // }
     $oauthRes->send();
     die;
 });
-

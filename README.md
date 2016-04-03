@@ -51,6 +51,11 @@ or
 $ mysql -p < db_tables
 ```
 
+insert a client_id
+```
+INSERT INTO oauth_clients (client_id, client_secret, redirect_uri) VALUES ("oauth_client", "oauth_client_secret", "http://192.168.99.100:8080/lamp/oauth");
+```
+
 ### Composer & Dependencies
 
 Download [Composer docker image](https://hub.docker.com/r/composer/composer/)

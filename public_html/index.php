@@ -1,10 +1,38 @@
 <?php
 require '../vendor/autoload.php';
-require '../config.php';
 require 'server.php';
 use \Slim\Middleware\HttpBasicAuthentication\AuthenticatorInterface;
 use \lib\Core;
 use \models\User;
+
+$app = new \Slim\App(array(
+    'debug' => true,
+));
+
+$container = $app->getContainer();
+// Register logger
+$container['logger'] = function ($c) {
+    $logger = new Monolog\Logger('slim');
+    $logger->pushProcessor(new Monolog\Processor\UidProcessor());
+    $logger->pushHandler(new Monolog\Handler\StreamHandler('../log/error.log', Monolog\Logger::DEBUG));
+    return $logger;
+};
+
+// Register view engine
+$container['view'] = function ($container) {
+    $view = new \Slim\Views\Twig('../templates');
+    $view->addExtension(new \Slim\Views\TwigExtension(
+        $container['router'],
+        $container['request']->getUri()
+    ));
+    return $view;
+};
+
+// oauth server
+$app->oauthServer = $server;
+
+// db connection
+$core = Core::getInstance();
 
 class UserAuthenticator implements AuthenticatorInterface {
     public function __invoke(array $arguments) {
@@ -17,25 +45,8 @@ class UserAuthenticator implements AuthenticatorInterface {
     }
 }
 
-
-$app = new \Slim\App(array(
-    'debug' => true,
-));
-
-$container = $app->getContainer();
-$container['logger'] = function ($c) {
-    $logger = new Monolog\Logger('slim');
-    $logger->pushProcessor(new Monolog\Processor\UidProcessor());
-    $logger->pushHandler(new Monolog\Handler\StreamHandler('../log/error.log', Monolog\Logger::DEBUG));
-    return $logger;
-};
-
-$app->oauthServer = $server;
-
-$core = Core::getInstance();
-
 $app->add(new \Slim\Middleware\HttpBasicAuthentication([
-    "path" => "/authorize",
+    "path" => "/oauth2/authorize",
     "secure" => false,
     "authenticator" => new UserAuthenticator(),
     "error" => function ($request, $response, $arguments) {
@@ -46,6 +57,7 @@ $app->add(new \Slim\Middleware\HttpBasicAuthentication([
     }
 ]));
 
+// routes
 $routers = glob('../routers/*.php');
 foreach ($routers as $router) {
     require $router;

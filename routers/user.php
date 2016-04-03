@@ -4,9 +4,19 @@ use models\User;
 $app->get('/users', function ($request, $response, $args) {
     $model = new User();
     $users = $model->getUsers();
-    $response = $response->withHeader('Content-type', 'application/json');
-    $response->getBody()->write(json_encode($users));
-    return $response;
+    $user = $users[0];
+    return $this->view->render($response, 'demo.html', [
+      'title' => "Demo User Only",
+      'username' => $user['username'],
+      'first_name' => $user['first_name'],
+      'last_name' => $user['last_name']
+    ]);
+});
+
+$app->get('/signup', function ($request, $response, $args) {
+    return $this->view->render($response, 'signup.html', [
+        'title' => "Signup An User"
+    ]);
 });
 
 $app->post('/users', function ($request, $response, $args) {
@@ -33,7 +43,6 @@ $mw = function ($request, $response, $next) use ($app) {
     }
     $tokenData = $server->getAccessTokenData($oauthReq);
     $_SERVER['PHP_AUTH_USER'] = $tokenData['user_id'];
-
     $response = $next($request, $response);
     return $response;
 };
@@ -43,6 +52,18 @@ $app->get('/users/{name}', function ($request, $response, $args) {
     $model = new User();
     $username = $request->getAttribute('name');
     $user = $model->getUserByName($username);
+    if (!$user) {
+        $response->getBody()->write(json_encode([
+            "error" => "No such user"
+        ]));
+        return $response;
+    }
+    if ($authUser !== $username) {
+        $response->getBody()->write(json_encode([
+            "error" => "You don't have access to this user"
+        ]));
+        return $response;
+    }
     $response->getBody()->write(json_encode($user));
     return $response;
 })->add($mw);
