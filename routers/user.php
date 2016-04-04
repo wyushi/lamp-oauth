@@ -4,12 +4,8 @@ use models\User;
 $app->get('/users', function ($request, $response, $args) {
     $model = new User();
     $users = $model->getUsers();
-    $user = $users[0];
     return $this->view->render($response, 'demo.html', [
-      'title' => "Demo User Only",
-      'username' => $user['username'],
-      'first_name' => $user['first_name'],
-      'last_name' => $user['last_name']
+      'users' => $users
     ]);
 });
 
@@ -30,7 +26,6 @@ $app->post('/users', function ($request, $response, $args) {
 });
 
 $mw = function ($request, $response, $next) use ($app) {
-
     $oauthReq = OAuth2\Request::createFromGlobals();
     $server = $app->oauthServer;
 
